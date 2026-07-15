@@ -1,0 +1,50 @@
+{
+  "name": "finanza.front",
+  "version": "1.0.0",
+  "description": "",
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "serve": "vite preview"
+  },
+  "dependencies": {
+    "@fawmi/vue-google-maps": "^0.9.79",
+    "@fullcalendar/core": "6.1.15",
+    "@fullcalendar/daygrid": "6.1.15",
+    "@fullcalendar/interaction": "6.1.15",
+    "@fullcalendar/luxon3": "6.1.15",
+    "@fullcalendar/timegrid": "6.1.15",
+    "@fullcalendar/vue3": "6.1.15",
+    "@googlemaps/js-api-loader": "^1.16.8",
+    "@primevue/themes": "^4.1.1",
+    "@vuelidate/core": "^2.0.3",
+    "@vuelidate/validators": "^2.0.4",
+    "axios": "^1.6.4",
+    "chart.js": "^4.4.6",
+    "date-fns": "^4.1.0",
+    "date-fns-tz": "^3.2.0",
+    "file-saver": "^2.0.5",
+    "googleapis": "^144.0.0",
+    "jszip": "^3.10.1",
+    "luxon": "^3.7.2",
+    "mitt": "^3.0.1",
+    "pinia": "^2.0.11",
+    "primeflex": "^3.1.2",
+    "primeicons": "^7.0.0",
+    "primevue": "^4.3.5",
+    "quill": "^2.0.3",
+    "tailwindcss-primeui": "^0.3.4",
+    "vue": "^3.4.34",
+    "vue-google-maps-community-fork": "^0.3.1",
+    "vue-router": "^4.0.14"
+  },
+  "devDependencies": {
+    "@vitejs/plugin-vue": "^5.2.4",
+    "@vitejs/plugin-vue-jsx": "^4.0.1",
+    "autoprefixer": "^10.4.20",
+    "postcss": "^8.4.47",
+    "tailwindcss": "^3.4.14",
+    "vite": "^6.3.5",
+    "vue-google-picker": "^1.0.0"
+  }
+}
