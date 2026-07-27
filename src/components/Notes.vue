@@ -41,9 +41,7 @@
               <div>{{ formatDate(note.updated_at) }}</div>
             </div>
 
-            <div class="text-sm text-[#000000D9] mb-2">
-              {{ note.content }}
-            </div>
+            <div class="text-sm text-[#000000D9] mb-2" v-html="note.content"></div>
 
             <div v-if="note.event_id" class="flex items-center gap-1 mt-1 mb-1">
               <i class="pi pi-calendar text-blue-400" style="font-size: 11px"></i>
@@ -288,6 +286,50 @@
       </div>
     </Dialog>
     <Dialog
+      v-model:visible="showViewNoteDialog"
+      :modal="true"
+      :style="{ width: '30rem' }"
+      header="Nota"
+    >
+      <div class="w-full flex flex-col">
+        <div
+          class="flex justify-between text-[12px] text-[#BFBFBF] font-medium leading-5 mb-3"
+        >
+          <div>{{ selectedNote?.user?.name }}</div>
+          <div>{{ formatDate(selectedNote?.updated_at) }}</div>
+        </div>
+
+        <div class="text-sm text-[#000000D9] mb-3" v-html="selectedNote?.content"></div>
+
+        <div v-if="selectedNote?.event_id" class="flex items-center gap-1 mb-3">
+          <i class="pi pi-calendar text-blue-400" style="font-size: 11px"></i>
+          <span class="text-xs text-blue-400">In Calendario</span>
+          <span v-if="selectedNote?.linked_event?.age_label" class="text-xs text-gray-400">
+            · {{ selectedNote.linked_event.age_label }}
+          </span>
+        </div>
+
+        <div v-if="selectedNote?.files?.length" class="text-sm text-[#214062]">
+          <div
+            v-for="file in selectedNote.files"
+            :key="file.id || file.name || file.title"
+            class="mb-2 flex items-center gap-2 min-w-0"
+          >
+            <i class="pi pi-paperclip flex-shrink-0" style="font-size: 12px"></i>
+
+            <span class="file-name flex-1 min-w-0 font-bold">
+              {{ file.name || file.title || "File senza nome" }}
+            </span>
+
+            <div class="flex gap-1 flex-shrink-0">
+              <Button icon="pi pi-eye" text size="small" @click="preview.open(file)" />
+              <Button icon="pi pi-download" text size="small" @click="downloadFile(file)" />
+            </div>
+          </div>
+        </div>
+      </div>
+    </Dialog>
+    <Dialog
       v-model:visible="showFilePreviewDialog"
       :modal="true"
       :style="{ width: '50vw' }"
@@ -391,6 +433,7 @@ const store = useStore();
 const toast = useToast();
 const confirm = useConfirm();
 const showNotesDialog = ref(false);
+const showViewNoteDialog = ref(false);
 const showSelect = ref(false);
 const isEditNote = ref(false);
 const noteId = ref();
@@ -689,6 +732,7 @@ const onNoteRightClick = (event, note) => {
 const onNoteClick = (note) => {
   if (note) {
     selectedNote.value = note;
+    showViewNoteDialog.value = true;
   }
 };
 

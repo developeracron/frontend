@@ -14,6 +14,8 @@
             :first="first"
             :rowsPerPageOptions="[10, 20, 50, 100]"
             :totalRecords="totalRecords"
+            :sortField="sortField"
+            :sortOrder="sortOrder"
             @page="onPage"
             @sort="onSort"
             removableSort
@@ -1636,8 +1638,8 @@ const logIdsInput = ref("");
 const totalRecords = ref(0);
 const perPage = ref(20);
 const first = ref(0);
-const sortField = ref(null);
-const sortOrder = ref(null);
+const sortField = ref("end_date");
+const sortOrder = ref(-1);
 const loading = ref(false);
 const saving = ref(false);
 const showAddSegmentDialog = ref(false);
