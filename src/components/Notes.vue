@@ -41,7 +41,7 @@
               <div>{{ formatDate(note.updated_at) }}</div>
             </div>
 
-            <div class="text-sm text-[#000000D9] mb-2" v-html="note.content"></div>
+            <div class="text-sm text-[#000000D9] mb-2 break-words" v-html="note.content"></div>
 
             <div v-if="note.event_id" class="flex items-center gap-1 mt-1 mb-1">
               <i class="pi pi-calendar text-blue-400" style="font-size: 11px"></i>
@@ -299,7 +299,7 @@
           <div>{{ formatDate(selectedNote?.updated_at) }}</div>
         </div>
 
-        <div class="text-sm text-[#000000D9] mb-3" v-html="selectedNote?.content"></div>
+        <div class="text-sm text-[#000000D9] mb-3 break-words" v-html="selectedNote?.content"></div>
 
         <div v-if="selectedNote?.event_id" class="flex items-center gap-1 mb-3">
           <i class="pi pi-calendar text-blue-400" style="font-size: 11px"></i>
