@@ -493,7 +493,7 @@ const imageLoadError = (event) => {
   });
 };
 
-const items = ref([
+const items = computed(() => [
   {
     label: "Copia",
     icon: "pi pi-copy",
@@ -534,6 +534,11 @@ const items = ref([
               noteId.value = selectedNote.value.id;
               newNote.value = selectedNote.value.content;
               files.value = [...selectedNote.value.files];
+              sendToCalendar.value = !!selectedNote.value.event_id;
+              eventDate.value = selectedNote.value.event_date
+                ? new Date(selectedNote.value.event_date)
+                : null;
+              eventColor.value = selectedNote.value.event_color || null;
               showNotesDialog.value = true;
             } else {
               toast.add({
@@ -1054,6 +1059,9 @@ const openNoteById = (id) => {
   noteId.value = note.id;
   newNote.value = note.content;
   files.value = note.files || [];
+  sendToCalendar.value = !!note.event_id;
+  eventDate.value = note.event_date ? new Date(note.event_date) : null;
+  eventColor.value = note.event_color || null;
   showNotesDialog.value = true;
 
   setNoteIdInQuery(note.id);
