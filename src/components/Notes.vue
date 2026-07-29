@@ -143,7 +143,7 @@
     >
       <div class="w-full flex justify-end flex-col">
         <div class="w-full m flex flex-col">
-          <Textarea v-model="newNote" rows="8" cols="30" class="mb-5" />
+          <Editor v-model="newNote" editorStyle="height: 200px" class="mb-5" />
           <div class="min-h-0 max-h-32 overflow-y-auto">
             <div
               class="flex justify-between items-center mb-4 gap-2"
@@ -258,7 +258,7 @@
               class="p-button-secondary"
               @click="
                 () => {
-                  if (newNote) {
+                  if (!isNoteEmpty(newNote)) {
                     if (isEditNote) {
                       updateNote(newNote);
                     } else {
@@ -377,7 +377,7 @@
 import { ref, computed, watch } from "vue";
 import { useRoute, useRouter } from "vue-router";
 import Dialog from "primevue/dialog";
-import Textarea from "primevue/textarea";
+import Editor from "primevue/editor";
 import Button from "primevue/button";
 import ContextMenu from "primevue/contextmenu";
 import { useToast } from "primevue/usetoast";
@@ -482,6 +482,11 @@ const fileTypes = computed(() => [
     },
   },
 ]);
+
+const isNoteEmpty = (content) => {
+  if (!content) return true;
+  return !content.replace(/<[^>]*>/g, "").trim();
+};
 
 const imageLoadError = (event) => {
   console.error("Errore caricamento immagine:", event);
