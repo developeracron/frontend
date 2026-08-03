@@ -1151,8 +1151,6 @@ const events = ref([]);
 const currentVisibleRange = ref(null);
 const latestEventsRequestId = ref(0);
 const lastLoadedKey = ref("");
-const loadedRangesByScope = ref({ all: [], mine: [] });
-const activeEventsScope = ref(null);
 
 const calendarRef = ref(null);
 
@@ -1188,50 +1186,6 @@ const reloadCurrentRange = async () => {
   });
 };
 
-const getScopeKey = (onlyMine) => (onlyMine ? "mine" : "all");
-
-const getLoadedRanges = (scope) => loadedRangesByScope.value[scope] || [];
-
-const setLoadedRanges = (scope, ranges) => {
-  loadedRangesByScope.value = {
-    ...loadedRangesByScope.value,
-    [scope]: ranges,
-  };
-};
-
-const mergeRanges = (ranges) => {
-  if (!ranges.length) return [];
-
-  const sorted = [...ranges].sort((a, b) => a.from.localeCompare(b.from));
-  const merged = [sorted[0]];
-
-  for (let i = 1; i < sorted.length; i += 1) {
-    const current = sorted[i];
-    const last = merged[merged.length - 1];
-    const lastNextDay = DateTime.fromISO(last.to).plus({ days: 1 }).toISODate();
-
-    if (current.from <= lastNextDay) {
-      if (current.to > last.to) {
-        last.to = current.to;
-      }
-    } else {
-      merged.push(current);
-    }
-  }
-
-  return merged;
-};
-
-const isRangeCovered = (scope, from, to) => {
-  if (activeEventsScope.value !== scope) return false;
-  return getLoadedRanges(scope).some((range) => range.from <= from && range.to >= to);
-};
-
-const rememberLoadedRange = (scope, from, to) => {
-  const updated = mergeRanges([...getLoadedRanges(scope), { from, to }]);
-  setLoadedRanges(scope, updated);
-};
-
 const fetchEvents = async ({ onlyMine = false, from, to, force = false } = {}) => {
   if (!from || !to) return;
 
@@ -1254,18 +1208,10 @@ const fetchEvents = async ({ onlyMine = false, from, to, force = false } = {}) =
 
     const mustOnlyMine = !canViewAllEvents.value;
     const finalOnlyMine = mustOnlyMine ? true : !!onlyMine;
-    const scope = getScopeKey(finalOnlyMine);
     const requestKey = `${from}:${to}:${finalOnlyMine ? "mine" : "all"}`;
 
     if (force) {
-      setLoadedRanges(scope, []);
       lastLoadedKey.value = "";
-    }
-
-    if (!force && isRangeCovered(scope, from, to)) {
-      isLoading.value = false;
-      isLoadingEvents.value = false;
-      return;
     }
 
     if (!force && requestKey === lastLoadedKey.value) {
@@ -1330,8 +1276,6 @@ const fetchEvents = async ({ onlyMine = false, from, to, force = false } = {}) =
       });
     }
 
-    activeEventsScope.value = scope;
-    rememberLoadedRange(scope, from, to);
     lastLoadedKey.value = requestKey;
     isLoading.value = false;
   } catch (error) {

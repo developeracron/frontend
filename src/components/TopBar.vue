@@ -653,6 +653,14 @@ const truncate = (text, maxLength = 100) => {
   return text.length > maxLength ? text.slice(0, maxLength) + "…" : text;
 };
 
+const stripHtml = (html) => {
+  if (!html) return "";
+  return html
+    .replace(/<[^>]*>/g, " ")
+    .replace(/\s+/g, " ")
+    .trim();
+};
+
 const getItemLabel = (type, item) => {
   switch (type) {
     case "clients":
@@ -660,7 +668,7 @@ const getItemLabel = (type, item) => {
         item.legal_name || item.fiscal_code || item.vat_number || "Senza nome"
       );
     case "notes":
-      return truncate(item.content, 100) || "Senza contenuto";
+      return truncate(stripHtml(item.content), 100) || "Senza contenuto";
     case "tenders":
       return item.name || "Senza nome";
     case "allocations":
